@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <!-- 1. Таблица Writer -->
+    <changeSet id="1" author="you">
+        <createTable tableName="writer">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- 2. Таблица Label -->
+    <changeSet id="2" author="you">
+        <createTable tableName="label">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 3. Таблица Post -->
+    <changeSet id="3" author="you">
+        <createTable tableName="post">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="content" type="TEXT"/>
+            <column name="created" type="DATETIME"/>
+            <column name="updated" type="DATETIME"/>
+            <column name="writer_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_post_writer" references="writer(id)"/>
+            </column>
+            <column name="status" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 4. Таблица-связка Post_Label -->
+    <changeSet id="4" author="you">
+        <createTable tableName="post_label">
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_postlabel_post" references="post(id)"/>
+            </column>
+            <column name="label_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_postlabel_label" references="label(id)"/>
+            </column>
+        </createTable>
+
+        <!-- составной первичный ключ -->
+        <addPrimaryKey tableName="post_label" columnNames="post_id, label_id" constraintName="pk_post_label"/>
+    </changeSet>
+
+</databaseChangeLog>
